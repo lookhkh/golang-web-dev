@@ -21,10 +21,34 @@ func main() {
 			continue
 		}
 
-		io.WriteString(conn, "\nHello from TCP server\n")
-		fmt.Fprintln(conn, "How is your day?")
-		fmt.Fprintf(conn, "%v", "Well, I hope!")
+		go handleRequest(conn)
 
-		conn.Close()
 	}
+}
+
+func handleRequest(conn net.Conn) {
+	io.WriteString(conn, "\nHello from TCP server\n")
+	fmt.Fprintln(conn, "How is your day?")
+	fmt.Fprintf(conn, "%v [%v]", "Well, I hope!", conn.RemoteAddr())
+	defer conn.Close()
+
+	buf := make([]byte, 0, 4096)
+	for {
+		_, err := conn.Read(buf)
+
+		if err != nil {
+			log.Println(err, conn)
+			break
+		}
+
+		str := string(buf)
+
+		fmt.Fprintf(conn, "you said %v", str)
+
+		if str == "bye" {
+			break
+		}
+	}
+
+	log.Println(conn, "is closed")
 }
