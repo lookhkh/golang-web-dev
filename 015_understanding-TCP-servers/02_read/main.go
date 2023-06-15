@@ -29,6 +29,11 @@ func handle(conn net.Conn) {
 	for scanner.Scan() {
 		ln := scanner.Text()
 		fmt.Println(ln)
+
+		if ln == "BYE" || ln == "bye" {
+			break
+		}
+
 	}
 	defer conn.Close()
 
