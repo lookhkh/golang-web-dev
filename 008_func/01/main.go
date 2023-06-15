@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 	"text/template"
+	"time"
 )
 
 var tpl *template.Template
@@ -26,8 +27,13 @@ type car struct {
 // "ft" is a func I declared
 // "ft" slices a string, returning the first three characters
 var fm = template.FuncMap{
-	"uc": strings.ToUpper,
-	"ft": firstThree,
+	"uc":   strings.ToUpper,
+	"ft":   firstThree,
+	"time": time2,
+}
+
+func time2(next int) int {
+	return next * 2
 }
 
 func init() {
@@ -77,9 +83,13 @@ func main() {
 	data := struct {
 		Wisdom    []sage
 		Transport []car
+		Now       string
+		Idx       int
 	}{
 		sages,
 		cars,
+		time.Now().Format(time.DateOnly),
+		10,
 	}
 
 	err := tpl.ExecuteTemplate(os.Stdout, "tpl.gohtml", data)

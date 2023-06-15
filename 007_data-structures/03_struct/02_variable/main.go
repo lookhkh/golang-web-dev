@@ -4,14 +4,10 @@ import (
 	"log"
 	"os"
 	"text/template"
+	"time"
 )
 
 var tpl *template.Template
-
-type sage struct {
-	Name  string
-	Motto string
-}
 
 func init() {
 	tpl = template.Must(template.ParseFiles("tpl.gohtml"))
@@ -19,9 +15,14 @@ func init() {
 
 func main() {
 
-	buddha := sage{
-		Name:  "Buddha",
-		Motto: "The belief of no beliefs",
+	buddha := struct {
+		Name      string
+		Motto     string
+		CreatedAt time.Time
+	}{
+		Name:      "Buddha",
+		Motto:     "The belief of no beliefs",
+		CreatedAt: time.Now(),
 	}
 
 	err := tpl.Execute(os.Stdout, buddha)

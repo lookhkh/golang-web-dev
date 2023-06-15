@@ -14,6 +14,7 @@ func init() {
 
 func main() {
 	err := tpl.Execute(os.Stdout, nil)
+
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -32,4 +33,5 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
 }
